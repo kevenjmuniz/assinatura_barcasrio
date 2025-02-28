@@ -52,31 +52,31 @@ const Index = () => {
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Set text styles for name
-    ctx.font = "bold 24px Oswald";
+    // Set text styles for name - UPDATED to 26px (from 24px)
+    ctx.font = "bold 26px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Position name text
+    // Position name text - Adjusted position to maintain alignment with new font size
     if (name) {
       ctx.fillText(name, 42, 100);
     }
 
-    // Set text styles for role
-    ctx.font = "600 12px Montserrat";
+    // Set text styles for role - UPDATED to 16px (from 12px)
+    ctx.font = "600 16px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
-    // Position role text
+    // Position role text - Adjusted position to maintain alignment with new font size
     if (role) {
-      ctx.fillText(role, 42, 147);
+      ctx.fillText(role, 42, 150);
     }
 
-    // Set text styles for department
-    ctx.font = "600 9px Montserrat";
+    // Set text styles for department - UPDATED to 12px (from 9px)
+    ctx.font = "600 12px Montserrat";
     
-    // Position department text
+    // Position department text - Adjusted position to maintain alignment with new font size
     if (department) {
-      ctx.fillText(department, 42, 171);
+      ctx.fillText(department, 42, 176);
     }
   };
 
