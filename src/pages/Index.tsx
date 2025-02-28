@@ -11,6 +11,7 @@ const Index = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [department, setDepartment] = useState("");
+  const [phone, setPhone] = useState(""); // Novo estado para o telefone
   const [isGenerating, setIsGenerating] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [captchaValue, setCaptchaValue] = useState("");
@@ -35,7 +36,7 @@ const Index = () => {
     if (isImageLoaded) {
       renderSignature();
     }
-  }, [name, role, department, isImageLoaded]);
+  }, [name, role, department, phone, isImageLoaded]);
 
   // Função para gerar um CAPTCHA aleatório
   const generateCaptcha = () => {
@@ -140,13 +141,22 @@ const Index = () => {
     if (department) {
       ctx.fillText(department, 75, 255);
     }
+    
+    // Mostrar o telefone apenas se estiver preenchido
+    if (phone) {
+      // Mantém o mesmo estilo do setor
+      ctx.font = "600 22px Montserrat";
+      
+      // Posiciona o telefone abaixo do setor
+      ctx.fillText(phone, 75, 290);
+    }
   };
 
   const handleProceedToDownload = () => {
     if (!name || !role || !department) {
       toast({
         title: "Campos incompletos",
-        description: "Por favor, preencha todos os campos para gerar a assinatura.",
+        description: "Por favor, preencha todos os campos obrigatórios para gerar a assinatura.",
         variant: "destructive",
       });
       return;
@@ -207,6 +217,7 @@ const Index = () => {
     setName("");
     setRole("");
     setDepartment("");
+    setPhone(""); // Limpar o telefone também
     setShowCaptcha(false);
     
     toast({
@@ -231,7 +242,7 @@ const Index = () => {
             
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="name" className="font-montserrat">Nome Completo</Label>
+                <Label htmlFor="name" className="font-montserrat">Nome Completo <span className="text-red-500">*</span></Label>
                 <Input
                   id="name"
                   placeholder="Digite seu nome completo"
@@ -243,7 +254,7 @@ const Index = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="role" className="font-montserrat">Cargo</Label>
+                <Label htmlFor="role" className="font-montserrat">Cargo <span className="text-red-500">*</span></Label>
                 <Input
                   id="role"
                   placeholder="Digite seu cargo"
@@ -255,12 +266,24 @@ const Index = () => {
               </div>
               
               <div className="space-y-2">
-                <Label htmlFor="department" className="font-montserrat">Setor</Label>
+                <Label htmlFor="department" className="font-montserrat">Setor <span className="text-red-500">*</span></Label>
                 <Input
                   id="department"
                   placeholder="Digite seu setor"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
+                  className="font-montserrat"
+                  disabled={showCaptcha}
+                />
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="phone" className="font-montserrat">Telefone | Ramal <span className="text-gray-400 text-sm">(opcional)</span></Label>
+                <Input
+                  id="phone"
+                  placeholder="Digite seu telefone ou ramal"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                   className="font-montserrat"
                   disabled={showCaptcha}
                 />
@@ -374,7 +397,7 @@ const Index = () => {
               
               <div className="mt-4">
                 <p className="text-sm text-gray-500 font-montserrat">
-                  Esta é uma visualização da sua assinatura. Preencha todos os campos para baixar a imagem final.
+                  Esta é uma visualização da sua assinatura. Preencha todos os campos obrigatórios para baixar a imagem final.
                 </p>
               </div>
             </Card>
