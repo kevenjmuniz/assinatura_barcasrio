@@ -57,26 +57,26 @@ const Index = () => {
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Position name text
+    // Position name text - Ajustado para alinhar perfeitamente com o logotipo
     if (name) {
-      ctx.fillText(name, 48, 110);
+      ctx.fillText(name, 48, 95); // Ajustado de 110 para 95 para alinhamento com o logotipo
     }
 
     // Set text styles for role - 27px per requirements
     ctx.font = "600 27px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
-    // Position role text - Ajustado para ficar mais próximo do nome
+    // Position role text - Mantendo a proporção visual com o nome
     if (role) {
-      ctx.fillText(role, 48, 165);
+      ctx.fillText(role, 48, 150); // Ajustado proporcionalmente à nova posição do nome
     }
 
     // Set text styles for department - 22px per requirements
     ctx.font = "600 22px Montserrat";
     
-    // Position department text - Ajustado para ficar mais próximo do cargo
+    // Position department text - Mantendo a proporção visual com o cargo
     if (department) {
-      ctx.fillText(department, 48, 195);
+      ctx.fillText(department, 48, 180); // Ajustado proporcionalmente à nova posição do cargo
     }
   };
 
