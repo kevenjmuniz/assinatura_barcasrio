@@ -21,7 +21,7 @@ const Index = () => {
   const signatureRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
-  const templateImage = "/lovable-uploads/28030f02-72f4-4cb3-8411-0c70005973c3.png";
+  const templateImage = "/lovable-uploads/5de7e180-9ee3-4d58-beed-a2a422ea0f9a.png";
   
   useEffect(() => {
     const img = new Image();
@@ -119,26 +119,26 @@ const Index = () => {
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Position name text - Ajustado com base na imagem de referência para perfeito alinhamento com o logotipo
+    // Posicionar o nome abaixo do logotipo Barcas Rio
     if (name) {
-      ctx.fillText(name, 48, 118); // Ajustado para baixo para alinhar com o logotipo
+      ctx.fillText(name, 80, 200);
     }
 
     // Set text styles for role - 27px per requirements
     ctx.font = "600 27px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
-    // Position role text - Mantendo a proporção visual com o nome
+    // Posicionar o cargo com espaçamento proporcional abaixo do nome
     if (role) {
-      ctx.fillText(role, 48, 173); // Ajustado proporcionalmente à nova posição do nome
+      ctx.fillText(role, 80, 240);
     }
 
     // Set text styles for department - 22px per requirements
     ctx.font = "600 22px Montserrat";
     
-    // Position department text - Mantendo a proporção visual com o cargo
+    // Posicionar o setor com espaçamento proporcional abaixo do cargo
     if (department) {
-      ctx.fillText(department, 48, 203); // Ajustado proporcionalmente à nova posição do cargo
+      ctx.fillText(department, 80, 275);
     }
   };
 
