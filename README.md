@@ -1,3 +1,4 @@
+
 # Welcome to your Lovable project
 
 ## Project info
@@ -52,7 +53,7 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
@@ -63,6 +64,26 @@ This project is built with .
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/4e9a26d4-08d3-42a2-bfae-019a0da3f20c) and click on Share -> Publish.
+
+## Running with Docker
+
+This project can be run using Docker. Make sure you have Docker and Docker Compose installed on your system.
+
+### Building and starting the container
+
+```sh
+# Build and start the container in detached mode
+docker-compose up -d
+
+# The application will be available at http://localhost
+```
+
+### Stopping the container
+
+```sh
+# Stop the running container
+docker-compose down
+```
 
 ## I want to use a custom domain - is that possible?
 
