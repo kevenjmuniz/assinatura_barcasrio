@@ -147,8 +147,9 @@ const Index = () => {
       // Mantém o mesmo estilo do setor
       ctx.font = "600 22px Montserrat";
       
-      // Posiciona o telefone abaixo do setor
-      ctx.fillText(phone, 75, 290);
+      // Ajuste da posição vertical do telefone para evitar sobreposição
+      // Aumentamos o valor Y para posicionar mais abaixo e evitar sobreposição com elementos da imagem
+      ctx.fillText(phone, 75, 285);
     }
   };
 
