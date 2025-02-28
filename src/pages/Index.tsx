@@ -119,9 +119,9 @@ const Index = () => {
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Posicionar o nome abaixo do logotipo Barcas Rio
+    // Posicionar o nome exatamente abaixo da linha azul
     if (name) {
-      ctx.fillText(name, 80, 200);
+      ctx.fillText(name, 75, 170);
     }
 
     // Set text styles for role - 27px per requirements
@@ -130,7 +130,7 @@ const Index = () => {
     
     // Posicionar o cargo com espaçamento proporcional abaixo do nome
     if (role) {
-      ctx.fillText(role, 80, 240);
+      ctx.fillText(role, 75, 220);
     }
 
     // Set text styles for department - 22px per requirements
@@ -138,7 +138,7 @@ const Index = () => {
     
     // Posicionar o setor com espaçamento proporcional abaixo do cargo
     if (department) {
-      ctx.fillText(department, 80, 275);
+      ctx.fillText(department, 75, 255);
     }
   };
 
