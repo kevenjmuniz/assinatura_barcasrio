@@ -52,8 +52,8 @@ const Index = () => {
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Set text styles for name - UPDATED to 26px (from 24px)
-    ctx.font = "bold 26px Oswald";
+    // Set text styles for name - UPDATED to 34px (from 26px)
+    ctx.font = "bold 34px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
@@ -62,21 +62,21 @@ const Index = () => {
       ctx.fillText(name, 42, 100);
     }
 
-    // Set text styles for role - UPDATED to 16px (from 12px)
-    ctx.font = "600 16px Montserrat";
+    // Set text styles for role - UPDATED to 25px (from 16px)
+    ctx.font = "600 25px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
     // Position role text - Adjusted position to maintain alignment with new font size
     if (role) {
-      ctx.fillText(role, 42, 150);
+      ctx.fillText(role, 42, 155);
     }
 
-    // Set text styles for department - UPDATED to 12px (from 9px)
-    ctx.font = "600 12px Montserrat";
+    // Set text styles for department - UPDATED to 20px (from 12px)
+    ctx.font = "600 20px Montserrat";
     
     // Position department text - Adjusted position to maintain alignment with new font size
     if (department) {
-      ctx.fillText(department, 42, 176);
+      ctx.fillText(department, 42, 190);
     }
   };
 
