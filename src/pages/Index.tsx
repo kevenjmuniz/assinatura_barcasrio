@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, RefreshCw } from "lucide-react";
+import { Download, RefreshCw, RefreshCcw } from "lucide-react";
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -13,7 +13,11 @@ const Index = () => {
   const [department, setDepartment] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState("");
+  const [userCaptchaInput, setUserCaptchaInput] = useState("");
+  const [showCaptcha, setShowCaptcha] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const captchaRef = useRef<HTMLCanvasElement>(null);
   const signatureRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -32,6 +36,64 @@ const Index = () => {
       renderSignature();
     }
   }, [name, role, department, isImageLoaded]);
+
+  // Função para gerar um CAPTCHA aleatório
+  const generateCaptcha = () => {
+    const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    setCaptchaValue(result);
+    setUserCaptchaInput("");
+    
+    // Renderiza o CAPTCHA no canvas
+    const canvas = captchaRef.current;
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    
+    // Limpar o canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Desenhar o fundo
+    ctx.fillStyle = "#f3f4f6";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Definir o estilo do texto
+    ctx.font = "bold 24px Arial";
+    ctx.fillStyle = "#334155";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    
+    // Adicionar ruído (linhas)
+    for (let i = 0; i < 6; i++) {
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.strokeStyle = "#94a3b8";
+      ctx.stroke();
+    }
+    
+    // Desenhar o texto com caracteres ligeiramente rotacionados
+    for (let i = 0; i < result.length; i++) {
+      ctx.save();
+      ctx.translate(30 + i * 25, canvas.height / 2);
+      ctx.rotate((Math.random() - 0.5) * 0.4);
+      ctx.fillText(result[i], 0, 0);
+      ctx.restore();
+    }
+    
+    // Adicionar mais ruído (pontos)
+    for (let i = 0; i < 50; i++) {
+      ctx.beginPath();
+      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, Math.PI * 2);
+      ctx.fillStyle = "#94a3b8";
+      ctx.fill();
+    }
+  };
 
   const renderSignature = () => {
     const canvas = canvasRef.current;
@@ -80,7 +142,7 @@ const Index = () => {
     }
   };
 
-  const handleDownload = () => {
+  const handleProceedToDownload = () => {
     if (!name || !role || !department) {
       toast({
         title: "Campos incompletos",
@@ -90,6 +152,27 @@ const Index = () => {
       return;
     }
 
+    setShowCaptcha(true);
+    generateCaptcha();
+  };
+
+  const handleVerifyCaptcha = () => {
+    if (userCaptchaInput === captchaValue) {
+      // CAPTCHA correto, prosseguir com o download
+      setShowCaptcha(false);
+      handleDownload();
+    } else {
+      // CAPTCHA incorreto
+      toast({
+        title: "CAPTCHA incorreto",
+        description: "O código digitado não corresponde à imagem. Tente novamente.",
+        variant: "destructive",
+      });
+      generateCaptcha();
+    }
+  };
+
+  const handleDownload = () => {
     setIsGenerating(true);
     
     setTimeout(() => {
@@ -124,6 +207,7 @@ const Index = () => {
     setName("");
     setRole("");
     setDepartment("");
+    setShowCaptcha(false);
     
     toast({
       title: "Campos resetados",
@@ -154,6 +238,7 @@ const Index = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="font-montserrat"
+                  disabled={showCaptcha}
                 />
               </div>
               
@@ -165,6 +250,7 @@ const Index = () => {
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="font-montserrat"
+                  disabled={showCaptcha}
                 />
               </div>
               
@@ -176,36 +262,83 @@ const Index = () => {
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   className="font-montserrat"
+                  disabled={showCaptcha}
                 />
               </div>
               
-              <div className="flex space-x-3 pt-4">
-                <Button 
-                  onClick={handleDownload} 
-                  className="flex-1 bg-barcas-teal hover:bg-barcas-teal/90 text-white font-montserrat"
-                  disabled={isGenerating || !name || !role || !department}
-                >
-                  {isGenerating ? (
-                    <>
-                      <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-                      Gerando...
-                    </>
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      Baixar Assinatura
-                    </>
-                  )}
-                </Button>
-                
-                <Button 
-                  onClick={handleReset} 
-                  variant="outline" 
-                  className="font-montserrat border-gray-300"
-                >
-                  Limpar
-                </Button>
-              </div>
+              {!showCaptcha ? (
+                <div className="flex space-x-3 pt-4">
+                  <Button 
+                    onClick={handleProceedToDownload} 
+                    className="flex-1 bg-barcas-teal hover:bg-barcas-teal/90 text-white font-montserrat"
+                    disabled={!name || !role || !department}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Baixar Assinatura
+                  </Button>
+                  
+                  <Button 
+                    onClick={handleReset} 
+                    variant="outline" 
+                    className="font-montserrat border-gray-300"
+                  >
+                    Limpar
+                  </Button>
+                </div>
+              ) : (
+                <div className="mt-4 space-y-4 animate-fade-in">
+                  <div className="p-4 bg-gray-50 rounded-md border border-gray-200">
+                    <div className="text-center mb-3">
+                      <h3 className="font-montserrat font-semibold text-gray-700">Verificação de Segurança</h3>
+                      <p className="text-sm text-gray-500">Digite os caracteres que você vê na imagem abaixo</p>
+                    </div>
+                    
+                    <div className="flex justify-center mb-3">
+                      <div className="relative">
+                        <canvas 
+                          ref={captchaRef} 
+                          width="200" 
+                          height="70" 
+                          className="border border-gray-300 rounded-md"
+                        />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="absolute -right-2 -top-2 h-8 w-8 bg-white border border-gray-200 rounded-full shadow-sm hover:bg-gray-100"
+                          onClick={generateCaptcha}
+                        >
+                          <RefreshCcw className="h-4 w-4 text-gray-500" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <Input
+                      placeholder="Digite o código"
+                      className="mb-3 font-montserrat text-center tracking-wider"
+                      value={userCaptchaInput}
+                      onChange={(e) => setUserCaptchaInput(e.target.value)}
+                    />
+                    
+                    <div className="flex space-x-3">
+                      <Button 
+                        onClick={handleVerifyCaptcha} 
+                        className="flex-1 bg-barcas-teal hover:bg-barcas-teal/90 text-white font-montserrat"
+                        disabled={!userCaptchaInput}
+                      >
+                        Verificar e Baixar
+                      </Button>
+                      
+                      <Button 
+                        onClick={() => setShowCaptcha(false)} 
+                        variant="outline" 
+                        className="font-montserrat border-gray-300"
+                      >
+                        Voltar
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </Card>
           
