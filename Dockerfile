@@ -18,10 +18,10 @@ COPY . .
 RUN npm run build
 
 # Expose port for a simple static server
-EXPOSE 8080
+EXPOSE 7890
 
 # Use a simple static server to serve the files
 RUN npm install -g serve
 
 # Start the static server
-CMD ["serve", "-s", "dist", "-l", "8080"]
+CMD ["serve", "-s", "dist", "-l", "7890"]
