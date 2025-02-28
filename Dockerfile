@@ -17,17 +17,11 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Use nginx to serve the static files
-FROM nginx:alpine
+# Expose port for a simple static server
+EXPOSE 8080
 
-# Copy the build files to nginx serve directory
-COPY --from=0 /app/dist /usr/share/nginx/html
+# Use a simple static server to serve the files
+RUN npm install -g serve
 
-# Copy custom nginx config if needed
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Expose port 80
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+# Start the static server
+CMD ["serve", "-s", "dist", "-l", "8080"]
