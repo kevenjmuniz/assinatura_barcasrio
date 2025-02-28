@@ -57,29 +57,29 @@ const Index = () => {
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Position name text - Adjusted position to align better with the logo
-    // Moved horizontally to align with logo (from 42px to 48px)
+    // Position name text - Adjusted vertical position to align better with the logo
+    // Adjusted from 100px to 110px vertically for better alignment with the logo
     if (name) {
-      ctx.fillText(name, 48, 100);
+      ctx.fillText(name, 48, 110);
     }
 
     // Set text styles for role - maintaining 25px
     ctx.font = "600 25px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
-    // Position role text - Increased vertical spacing between name and role
-    // Moved down from 155px to 170px to create more space
+    // Position role text - Adjusted to maintain spacing from the updated name position
+    // Moved from 170px to 180px to maintain the same spacing
     if (role) {
-      ctx.fillText(role, 48, 170); // Aligned horizontally with name (48px)
+      ctx.fillText(role, 48, 180); // Aligned horizontally with name (48px)
     }
 
     // Set text styles for department - maintaining 20px
     ctx.font = "600 20px Montserrat";
     
-    // Position department text - Reduced spacing between role and department
-    // Adjusted from 205px to 195px to create proportional spacing (1.5x factor)
+    // Position department text - Maintaining the proportional spacing from role
+    // Moved from 195px to 205px to maintain the same relative spacing
     if (department) {
-      ctx.fillText(department, 48, 195); // Aligned horizontally with name and role (48px)
+      ctx.fillText(department, 48, 205); // Aligned horizontally with name and role (48px)
     }
   };
 
