@@ -8,5 +8,6 @@ services:
     ports:
       - "7890:7890"
     restart: unless-stopped
-    volumes:
-      - ./dist:/app/dist
+    # Removendo o volume que sobrescreve a pasta dist
+    # volumes:
+    #   - ./dist:/app/dist
