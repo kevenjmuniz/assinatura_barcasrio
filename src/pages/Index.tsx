@@ -76,10 +76,10 @@ const Index = () => {
     // Set text styles for department - maintaining 20px
     ctx.font = "600 20px Montserrat";
     
-    // Position department text - Adjusted to maintain proportional spacing
-    // Moved down from 190px to 205px to maintain spacing between role and department
+    // Position department text - Reduced spacing between role and department
+    // Adjusted from 205px to 195px to create proportional spacing (1.5x factor)
     if (department) {
-      ctx.fillText(department, 48, 205); // Aligned horizontally with name and role (48px)
+      ctx.fillText(department, 48, 195); // Aligned horizontally with name and role (48px)
     }
   };
 
