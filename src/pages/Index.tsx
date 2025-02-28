@@ -234,7 +234,7 @@ const Index = () => {
                 <Label htmlFor="name" className="font-montserrat">Nome Completo</Label>
                 <Input
                   id="name"
-                  placeholder="Ex: Weverton Amorim"
+                  placeholder="Digite seu nome completo"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="font-montserrat"
@@ -246,7 +246,7 @@ const Index = () => {
                 <Label htmlFor="role" className="font-montserrat">Cargo</Label>
                 <Input
                   id="role"
-                  placeholder="Ex: Gerente de RH"
+                  placeholder="Digite seu cargo"
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
                   className="font-montserrat"
@@ -258,7 +258,7 @@ const Index = () => {
                 <Label htmlFor="department" className="font-montserrat">Setor</Label>
                 <Input
                   id="department"
-                  placeholder="Ex: Recursos Humanos"
+                  placeholder="Digite seu setor"
                   value={department}
                   onChange={(e) => setDepartment(e.target.value)}
                   className="font-montserrat"
