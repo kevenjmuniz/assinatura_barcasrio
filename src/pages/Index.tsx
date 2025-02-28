@@ -59,7 +59,7 @@ const Index = () => {
     
     // Position name text - Ajustado com base na imagem de referência para perfeito alinhamento com o logotipo
     if (name) {
-      ctx.fillText(name, 48, 93); // Ajustado de 95 para 93 conforme imagem de referência
+      ctx.fillText(name, 48, 118); // Ajustado para baixo para alinhar com o logotipo
     }
 
     // Set text styles for role - 27px per requirements
@@ -68,7 +68,7 @@ const Index = () => {
     
     // Position role text - Mantendo a proporção visual com o nome
     if (role) {
-      ctx.fillText(role, 48, 148); // Ajustado proporcionalmente à nova posição do nome
+      ctx.fillText(role, 48, 173); // Ajustado proporcionalmente à nova posição do nome
     }
 
     // Set text styles for department - 22px per requirements
@@ -76,7 +76,7 @@ const Index = () => {
     
     // Position department text - Mantendo a proporção visual com o cargo
     if (department) {
-      ctx.fillText(department, 48, 178); // Ajustado proporcionalmente à nova posição do cargo
+      ctx.fillText(department, 48, 203); // Ajustado proporcionalmente à nova posição do cargo
     }
   };
 
