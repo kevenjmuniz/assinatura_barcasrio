@@ -52,8 +52,8 @@ const Index = () => {
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Set text styles for name - UPDATED to 38px (from 34px)
-    ctx.font = "bold 38px Oswald";
+    // Set text styles for name - UPDATED to 42px (from 38px)
+    ctx.font = "bold 42px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
