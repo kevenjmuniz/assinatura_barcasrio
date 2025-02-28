@@ -382,7 +382,7 @@ const Index = () => {
         </div>
 
         <div className="mt-10 text-center text-gray-500 text-sm font-montserrat animate-slide-up" style={{ animationDelay: "0.3s" }}>
-          <p>Gerador de Assinaturas de E-mail • Barcas Rio</p>
+          <p>Gerador de Assinaturas de E-mail • <a href="https://barcasrio.com.br" target="_blank" rel="noopener noreferrer" className="text-barcas-teal hover:underline">Barcas Rio</a></p>
         </div>
       </div>
     </div>
