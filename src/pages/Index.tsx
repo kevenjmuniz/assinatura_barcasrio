@@ -115,21 +115,21 @@ const Index = () => {
       ctx.fillText(name, 75, baseY);
     }
 
-    ctx.font = "600 22px Montserrat";
+    ctx.font = "600 27px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
     if (role) {
       ctx.fillText(role, 75, baseY + lineSpacing);
     }
 
-    ctx.font = "600 18px Montserrat";
+    ctx.font = "600 22px Montserrat";
     
     if (department) {
       ctx.fillText(department, 75, baseY + lineSpacing * 2);
     }
     
     if (phone) {
-      ctx.font = "600 18px Montserrat";
+      ctx.font = "600 22px Montserrat";
       ctx.fillText(phone, 75, baseY + lineSpacing * 3);
     }
   };
