@@ -107,26 +107,29 @@ const Index = () => {
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
+    const baseY = 170;
+    const lineSpacing = 25 * 0.75;
+
     if (name) {
-      ctx.fillText(name, 75, 170);
+      ctx.fillText(name, 75, baseY);
     }
 
     ctx.font = "600 22px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
     if (role) {
-      ctx.fillText(role, 75, 210);
+      ctx.fillText(role, 75, baseY + lineSpacing);
     }
 
     ctx.font = "600 18px Montserrat";
     
     if (department) {
-      ctx.fillText(department, 75, 240);
+      ctx.fillText(department, 75, baseY + lineSpacing * 2);
     }
     
     if (phone) {
       ctx.font = "600 18px Montserrat";
-      ctx.fillText(phone, 75, 270);
+      ctx.fillText(phone, 75, baseY + lineSpacing * 3);
     }
   };
 
