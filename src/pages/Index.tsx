@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,6 +109,7 @@ const Index = () => {
     
     const baseY = 170;
     const lineSpacing = 25 * 1.05;
+    const departmentToPhoneSpacing = 26.25;
 
     if (name) {
       ctx.fillText(name, 75, baseY);
@@ -130,7 +130,7 @@ const Index = () => {
     
     if (phone) {
       ctx.font = "600 22px Montserrat";
-      ctx.fillText(phone, 75, baseY + lineSpacing * 3);
+      ctx.fillText(phone, 75, baseY + lineSpacing * 2 + departmentToPhoneSpacing);
     }
   };
 
