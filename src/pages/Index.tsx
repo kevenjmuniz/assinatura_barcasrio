@@ -109,7 +109,7 @@ const Index = () => {
     ctx.textAlign = "left";
     
     const baseY = 170;
-    const lineSpacing = 25 * 0.90;
+    const lineSpacing = 25 * 1.05;
 
     if (name) {
       ctx.fillText(name, 75, baseY);
