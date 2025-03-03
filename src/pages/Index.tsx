@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,17 +104,19 @@ const Index = () => {
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+    // Configurações exatas para corresponder à imagem de referência
     ctx.font = "bold 48px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    const baseY = 170;
-    const roleY = baseY + 40;
-    const departmentY = roleY + 32;
-    const phoneY = departmentY + 28;
+    // Posições Y exatas baseadas na imagem de referência
+    const nameY = 150;       // Posição do nome
+    const roleY = 190;       // Posição do cargo
+    const departmentY = 218; // Posição do departamento
+    const phoneY = 245;      // Posição do telefone
 
     if (name) {
-      ctx.fillText(name, 75, baseY);
+      ctx.fillText(name, 75, nameY);
     }
 
     ctx.font = "600 27px Montserrat";
