@@ -115,18 +115,18 @@ const Index = () => {
     ctx.fillStyle = "#F08B2E";
     
     if (role) {
-      ctx.fillText(role, 75, 225);
+      ctx.fillText(role, 75, 210);
     }
 
     ctx.font = "600 22px Montserrat";
     
     if (department) {
-      ctx.fillText(department, 75, 260);
+      ctx.fillText(department, 75, 240);
     }
     
     if (phone) {
       ctx.font = "600 22px Montserrat";
-      ctx.fillText(phone, 75, 290);
+      ctx.fillText(phone, 75, 270);
     }
   };
 
