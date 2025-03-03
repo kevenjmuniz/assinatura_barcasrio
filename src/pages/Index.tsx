@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -112,21 +111,21 @@ const Index = () => {
       ctx.fillText(name, 75, 170);
     }
 
-    ctx.font = "600 27px Montserrat";
+    ctx.font = "600 22px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
     if (role) {
       ctx.fillText(role, 75, 210);
     }
 
-    ctx.font = "600 22px Montserrat";
+    ctx.font = "600 18px Montserrat";
     
     if (department) {
       ctx.fillText(department, 75, 240);
     }
     
     if (phone) {
-      ctx.font = "600 18px Montserrat"; // Changed from 22px to 18px
+      ctx.font = "600 18px Montserrat";
       ctx.fillText(phone, 75, 270);
     }
   };
