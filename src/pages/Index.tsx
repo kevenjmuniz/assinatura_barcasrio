@@ -108,9 +108,9 @@ const Index = () => {
     ctx.textAlign = "left";
     
     const baseY = 170;
-    const nameToRoleSpacing = 25 * 0.90;
-    const lineSpacing = 25 * 1.05;
-    const departmentToPhoneSpacing = 26.25;
+    const roleY = baseY + 40;
+    const departmentY = roleY + 32;
+    const phoneY = departmentY + 28;
 
     if (name) {
       ctx.fillText(name, 75, baseY);
@@ -120,18 +120,18 @@ const Index = () => {
     ctx.fillStyle = "#F08B2E";
     
     if (role) {
-      ctx.fillText(role, 75, baseY + nameToRoleSpacing);
+      ctx.fillText(role, 75, roleY);
     }
 
     ctx.font = "600 22px Montserrat";
     
     if (department) {
-      ctx.fillText(department, 75, baseY + nameToRoleSpacing + lineSpacing);
+      ctx.fillText(department, 75, departmentY);
     }
     
     if (phone) {
       ctx.font = "600 22px Montserrat";
-      ctx.fillText(phone, 75, baseY + nameToRoleSpacing + lineSpacing + departmentToPhoneSpacing);
+      ctx.fillText(phone, 75, phoneY);
     }
   };
 
