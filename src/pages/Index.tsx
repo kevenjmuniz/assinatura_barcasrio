@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -108,7 +109,7 @@ const Index = () => {
     ctx.textAlign = "left";
     
     const baseY = 170;
-    const lineSpacing = 25 * 0.75;
+    const lineSpacing = 25 * 0.90;
 
     if (name) {
       ctx.fillText(name, 75, baseY);
