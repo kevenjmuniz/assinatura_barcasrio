@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +134,72 @@ const Index = () => {
     if (phone) {
       ctx.font = "600 22px Montserrat";
       ctx.fillText(phone, 75, phoneY);
+    }
+
+    // Armazenar a localização do link do site na assinatura para detecção de cliques
+    const linkX = 520;  // Posição X aproximada do texto "barcasrio.com.br"
+    const linkY = 230;  // Posição Y aproximada do texto "barcasrio.com.br"
+    const linkWidth = 150; // Largura aproximada do texto
+    const linkHeight = 20; // Altura aproximada do texto
+
+    // Armazenar a área clicável para uso posterior
+    canvas.setAttribute('data-link-x', linkX.toString());
+    canvas.setAttribute('data-link-y', linkY.toString());
+    canvas.setAttribute('data-link-width', linkWidth.toString());
+    canvas.setAttribute('data-link-height', linkHeight.toString());
+    
+    // Adiciona manipulador de cliques no canvas para detecção do clique no link
+    if (!canvas.onclick) {
+      canvas.onclick = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        const x = (event.clientX - rect.left) * scaleX;
+        const y = (event.clientY - rect.top) * scaleY;
+        
+        const linkX = parseInt(canvas.getAttribute('data-link-x') || '0');
+        const linkY = parseInt(canvas.getAttribute('data-link-y') || '0');
+        const linkWidth = parseInt(canvas.getAttribute('data-link-width') || '0');
+        const linkHeight = parseInt(canvas.getAttribute('data-link-height') || '0');
+        
+        // Verificar se o clique foi na área do link
+        if (
+          x >= linkX && 
+          x <= linkX + linkWidth && 
+          y >= linkY - linkHeight && 
+          y <= linkY
+        ) {
+          window.open('https://barcasrio.com.br', '_blank');
+        }
+      };
+      
+      // Adiciona manipulador para mudar o cursor quando passar sobre o link
+      canvas.onmousemove = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        
+        const x = (event.clientX - rect.left) * scaleX;
+        const y = (event.clientY - rect.top) * scaleY;
+        
+        const linkX = parseInt(canvas.getAttribute('data-link-x') || '0');
+        const linkY = parseInt(canvas.getAttribute('data-link-y') || '0');
+        const linkWidth = parseInt(canvas.getAttribute('data-link-width') || '0');
+        const linkHeight = parseInt(canvas.getAttribute('data-link-height') || '0');
+        
+        // Mudar o cursor para pointer quando estiver sobre o link
+        if (
+          x >= linkX && 
+          x <= linkX + linkWidth && 
+          y >= linkY - linkHeight && 
+          y <= linkY
+        ) {
+          canvas.style.cursor = 'pointer';
+        } else {
+          canvas.style.cursor = 'default';
+        }
+      };
     }
   };
 
