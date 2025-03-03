@@ -111,9 +111,9 @@ const Index = () => {
     
     // Posições Y exatas baseadas na imagem de referência
     const nameY = 150;       // Posição do nome
-    const roleY = 190;       // Posição do cargo
-    const departmentY = 218; // Posição do departamento
-    const phoneY = 245;      // Posição do telefone
+    const roleY = 180;       // Posição do cargo (diminuído de 190 para 180)
+    const departmentY = 208; // Posição do departamento (ajustado de 218 para 208)
+    const phoneY = 235;      // Posição do telefone (ajustado de 245 para 235)
 
     if (name) {
       ctx.fillText(name, 75, nameY);
