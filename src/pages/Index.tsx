@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -276,17 +277,17 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4 py-8 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-b from-[#0EA5E9] to-[#0891B2] flex flex-col items-center justify-center px-4 py-8 animate-fade-in">
       <div className="max-w-4xl w-full mx-auto">
         <div className="text-center mb-8 animate-slide-up">
-          <h1 className="text-3xl font-oswald font-bold text-barcas-teal mb-2">Gerador de Assinaturas</h1>
-          <p className="text-gray-600 font-montserrat">
+          <h1 className="text-3xl font-oswald font-bold text-white mb-2">Gerador de Assinaturas</h1>
+          <p className="text-white/90 font-montserrat">
             Crie sua assinatura de e-mail personalizada preenchendo os campos abaixo
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
-          <Card className="p-6 shadow-md border border-gray-100 bg-white animate-slide-up" style={{ animationDelay: "0.1s" }}>
+          <Card className="p-6 shadow-md border border-white/10 bg-white/95 backdrop-blur-sm animate-slide-up" style={{ animationDelay: "0.1s" }}>
             <h2 className="text-xl font-oswald font-bold text-barcas-teal mb-4">Informações Pessoais</h2>
             
             <div className="space-y-4">
@@ -415,7 +416,7 @@ const Index = () => {
           </Card>
           
           <div className="animate-slide-up" style={{ animationDelay: "0.2s" }}>
-            <Card className="p-6 shadow-md border border-gray-100 bg-white h-full flex flex-col">
+            <Card className="p-6 shadow-md border border-white/10 bg-white/95 backdrop-blur-sm h-full flex flex-col">
               <h2 className="text-xl font-oswald font-bold text-barcas-teal mb-4">Visualização</h2>
               
               <div 
@@ -453,8 +454,8 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mt-10 text-center text-gray-500 text-sm font-montserrat animate-slide-up" style={{ animationDelay: "0.3s" }}>
-          <p>Gerador de Assinaturas de E-mail • <a href="https://barcasrio.com.br" target="_blank" rel="noopener noreferrer" className="text-barcas-teal hover:underline">Barcas Rio</a></p>
+        <div className="mt-10 text-center text-white/80 text-sm font-montserrat animate-slide-up" style={{ animationDelay: "0.3s" }}>
+          <p>Gerador de Assinaturas de E-mail • <a href="https://barcasrio.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">Barcas Rio</a></p>
         </div>
       </div>
     </div>
