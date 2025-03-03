@@ -23,6 +23,7 @@ const Index = () => {
   const { toast } = useToast();
 
   const templateImage = "/lovable-uploads/5de7e180-9ee3-4d58-beed-a2a422ea0f9a.png";
+  const backgroundImage = "/lovable-uploads/d9d25600-5406-439d-bc1a-0af1236d0cf3.png";
   
   useEffect(() => {
     const img = new Image();
@@ -277,8 +278,22 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#0EA5E9] to-[#0891B2] flex flex-col items-center justify-center px-4 py-8 animate-fade-in">
-      <div className="max-w-4xl w-full mx-auto">
+    <div className="min-h-screen relative flex flex-col items-center justify-center px-4 py-8 animate-fade-in">
+      {/* Background image with blur */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
+        style={{ 
+          backgroundImage: `url(${backgroundImage})`,
+          filter: 'blur(5px)',
+          opacity: 0.8,
+          transform: 'scale(1.1)' // Prevent blur edges
+        }}
+      ></div>
+      
+      {/* Overlay to ensure contrast */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0EA5E9]/60 to-[#0891B2]/70"></div>
+
+      <div className="max-w-4xl w-full mx-auto relative z-10">
         <div className="text-center mb-8 animate-slide-up">
           <h1 className="text-3xl font-oswald font-bold text-white mb-2">Gerador de Assinaturas</h1>
           <p className="text-white/90 font-montserrat">
@@ -454,7 +469,7 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="mt-10 text-center text-white/80 text-sm font-montserrat animate-slide-up" style={{ animationDelay: "0.3s" }}>
+        <div className="mt-10 text-center text-white/90 text-sm font-montserrat animate-slide-up" style={{ animationDelay: "0.3s" }}>
           <p>Gerador de Assinaturas de E-mail • <a href="https://barcasrio.com.br" target="_blank" rel="noopener noreferrer" className="text-white hover:underline">Barcas Rio</a></p>
         </div>
       </div>
