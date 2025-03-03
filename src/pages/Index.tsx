@@ -108,7 +108,7 @@ const Index = () => {
     ctx.textAlign = "left";
     
     const baseY = 170;
-    const nameToRoleSpacing = 25 * 1.10;
+    const nameToRoleSpacing = 25 * 0.90;
     const lineSpacing = 25 * 1.05;
     const departmentToPhoneSpacing = 26.25;
 
