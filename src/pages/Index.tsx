@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +10,7 @@ const Index = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [department, setDepartment] = useState("");
-  const [phone, setPhone] = useState(""); // Novo estado para o telefone
+  const [phone, setPhone] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [captchaValue, setCaptchaValue] = useState("");
@@ -38,7 +37,6 @@ const Index = () => {
     }
   }, [name, role, department, phone, isImageLoaded]);
 
-  // Função para gerar um CAPTCHA aleatório
   const generateCaptcha = () => {
     const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
     let result = '';
@@ -49,27 +47,22 @@ const Index = () => {
     setCaptchaValue(result);
     setUserCaptchaInput("");
     
-    // Renderiza o CAPTCHA no canvas
     const canvas = captchaRef.current;
     if (!canvas) return;
     
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     
-    // Limpar o canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Desenhar o fundo
     ctx.fillStyle = "#f3f4f6";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    // Definir o estilo do texto
     ctx.font = "bold 24px Arial";
     ctx.fillStyle = "#334155";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     
-    // Adicionar ruído (linhas)
     for (let i = 0; i < 6; i++) {
       ctx.beginPath();
       ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -78,7 +71,6 @@ const Index = () => {
       ctx.stroke();
     }
     
-    // Desenhar o texto com caracteres ligeiramente rotacionados
     for (let i = 0; i < result.length; i++) {
       ctx.save();
       ctx.translate(30 + i * 25, canvas.height / 2);
@@ -87,7 +79,6 @@ const Index = () => {
       ctx.restore();
     }
     
-    // Adicionar mais ruído (pontos)
     for (let i = 0; i < 50; i++) {
       ctx.beginPath();
       ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, 1, 0, Math.PI * 2);
@@ -103,53 +94,39 @@ const Index = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set canvas dimensions to match the template image
     canvas.width = 829;
     canvas.height = 414;
 
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw the template image
     const img = new Image();
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Set text styles for name - 48px per requirements
     ctx.font = "bold 48px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Posicionar o nome exatamente abaixo da linha azul
     if (name) {
       ctx.fillText(name, 75, 170);
     }
 
-    // Set text styles for role - 27px per requirements
     ctx.font = "600 27px Montserrat";
     ctx.fillStyle = "#F08B2E";
     
-    // Posicionar o cargo com espaçamento proporcional abaixo do nome
     if (role) {
-      ctx.fillText(role, 75, 220);
+      ctx.fillText(role, 75, 225);
     }
 
-    // Set text styles for department - 22px per requirements
     ctx.font = "600 22px Montserrat";
     
-    // Posicionar o setor com espaçamento proporcional abaixo do cargo
     if (department) {
-      ctx.fillText(department, 75, 255);
+      ctx.fillText(department, 75, 260);
     }
     
-    // Mostrar o telefone apenas se estiver preenchido
     if (phone) {
-      // Mantém o mesmo estilo do setor
       ctx.font = "600 22px Montserrat";
-      
-      // Ajuste da posição vertical do telefone para evitar sobreposição
-      // Aumentamos o valor Y para posicionar mais abaixo e evitar sobreposição com elementos da imagem
-      ctx.fillText(phone, 75, 285);
+      ctx.fillText(phone, 75, 290);
     }
   };
 
@@ -169,11 +146,9 @@ const Index = () => {
 
   const handleVerifyCaptcha = () => {
     if (userCaptchaInput === captchaValue) {
-      // CAPTCHA correto, prosseguir com o download
       setShowCaptcha(false);
       handleDownload();
     } else {
-      // CAPTCHA incorreto
       toast({
         title: "CAPTCHA incorreto",
         description: "O código digitado não corresponde à imagem. Tente novamente.",
@@ -218,7 +193,7 @@ const Index = () => {
     setName("");
     setRole("");
     setDepartment("");
-    setPhone(""); // Limpar o telefone também
+    setPhone("");
     setShowCaptcha(false);
     
     toast({
