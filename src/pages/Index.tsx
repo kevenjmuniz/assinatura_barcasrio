@@ -243,7 +243,18 @@ const Index = () => {
       if (!canvas) return;
       
       try {
-        const dataUrl = canvas.toDataURL("image/png");
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = 400;
+        tempCanvas.height = 200;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        if (!tempCtx) {
+          throw new Error("Could not get temporary canvas context");
+        }
+        
+        tempCtx.drawImage(canvas, 0, 0, canvas.width, canvas.height, 0, 0, 400, 200);
+        
+        const dataUrl = tempCanvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.download = `assinatura-${name.toLowerCase().replace(/\s+/g, "-")}.png`;
         link.href = dataUrl;
