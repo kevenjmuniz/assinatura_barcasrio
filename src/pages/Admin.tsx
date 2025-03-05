@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,10 +10,12 @@ import {
   SortAsc, 
   SortDesc, 
   Download,
-  Eye
+  Eye,
+  LogOut
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Signature } from "./Index";
+import { logout } from "@/utils/auth";
 
 const Admin = () => {
   const [signatures, setSignatures] = useState<Signature[]>([]);
@@ -23,8 +24,8 @@ const Admin = () => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [selectedSignature, setSelectedSignature] = useState<Signature | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  // Carregar assinaturas do localStorage
   useEffect(() => {
     try {
       const storedSignatures = localStorage.getItem("signatures");
@@ -43,7 +44,6 @@ const Admin = () => {
     }
   }, [toast]);
 
-  // Filtrar assinaturas com base na pesquisa
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredSignatures(signatures);
@@ -59,7 +59,6 @@ const Admin = () => {
     }
   }, [searchQuery, signatures]);
 
-  // Ordenar assinaturas por data
   const handleSort = () => {
     const newDirection = sortDirection === "asc" ? "desc" : "asc";
     setSortDirection(newDirection);
@@ -73,7 +72,6 @@ const Admin = () => {
     setFilteredSignatures(sorted);
   };
 
-  // Remover uma assinatura
   const handleDelete = (id: string) => {
     try {
       const updatedSignatures = signatures.filter((sig) => sig.id !== id);
@@ -82,7 +80,6 @@ const Admin = () => {
         filteredSignatures.filter((sig) => sig.id !== id)
       );
       
-      // Atualizar localStorage
       localStorage.setItem("signatures", JSON.stringify(updatedSignatures));
       
       toast({
@@ -98,7 +95,6 @@ const Admin = () => {
     }
   };
 
-  // Fazer download da assinatura
   const handleDownload = (signature: Signature) => {
     if (!signature.imageUrl) {
       toast({
@@ -130,7 +126,15 @@ const Admin = () => {
     }
   };
 
-  // Formatar data para exibição
+  const handleLogout = () => {
+    logout();
+    toast({
+      title: "Logout realizado",
+      description: "Você foi desconectado do painel administrativo.",
+    });
+    navigate("/login");
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("pt-BR", {
@@ -144,7 +148,6 @@ const Admin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#0EA5E9]/90 to-[#0891B2]/90 p-6">
-      {/* Background image with blur */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
         style={{ 
@@ -155,7 +158,6 @@ const Admin = () => {
         }}
       ></div>
       
-      {/* Overlay to ensure contrast */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0EA5E9]/70 to-[#0891B2]/80"></div>
 
       <div className="relative z-10 max-w-6xl mx-auto">
@@ -171,6 +173,14 @@ const Admin = () => {
               Painel de Administração
             </h1>
           </div>
+          <Button 
+            variant="outline" 
+            className="bg-white/20 text-white hover:bg-white/30"
+            onClick={handleLogout}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            Sair
+          </Button>
         </div>
 
         <Card className="bg-white/95 backdrop-blur-sm border-white/10 mb-6">
@@ -271,7 +281,6 @@ const Admin = () => {
           </CardContent>
         </Card>
 
-        {/* Modal de visualização da assinatura */}
         {selectedSignature && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
             <Card className="max-w-2xl w-full">
