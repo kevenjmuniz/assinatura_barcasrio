@@ -1,11 +1,21 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Download, RefreshCw, RefreshCcw } from "lucide-react";
+import { Download, RefreshCw, RefreshCcw, UserCog } from "lucide-react";
+import { Link } from "react-router-dom";
+
+export interface Signature {
+  id: string;
+  name: string;
+  role: string;
+  department: string;
+  phone: string;
+  date: string;
+  imageUrl?: string;
+}
 
 const Index = () => {
   const [name, setName] = useState("");
@@ -105,16 +115,14 @@ const Index = () => {
     img.src = templateImage;
     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-    // Configurações exatas para corresponder à imagem de referência
     ctx.font = "bold 48px Oswald";
     ctx.fillStyle = "#005C6E";
     ctx.textAlign = "left";
     
-    // Posições Y exatas baseadas na imagem de referência
-    const nameY = 150;       // Posição do nome
-    const roleY = 180;       // Posição do cargo (diminuído de 190 para 180)
-    const departmentY = 208; // Posição do departamento (ajustado de 218 para 208)
-    const phoneY = 235;      // Posição do telefone (ajustado de 245 para 235)
+    const nameY = 150;
+    const roleY = 180;
+    const departmentY = 208;
+    const phoneY = 235;
 
     if (name) {
       ctx.fillText(name, 75, nameY);
@@ -138,19 +146,16 @@ const Index = () => {
       ctx.fillText(phone, 75, phoneY);
     }
 
-    // Armazenar a localização do link do site na assinatura para detecção de cliques
-    const linkX = 520;  // Posição X aproximada do texto "barcasrio.com.br"
-    const linkY = 230;  // Posição Y aproximada do texto "barcasrio.com.br"
-    const linkWidth = 150; // Largura aproximada do texto
-    const linkHeight = 20; // Altura aproximada do texto
+    const linkX = 520;
+    const linkY = 230;
+    const linkWidth = 150;
+    const linkHeight = 20;
 
-    // Armazenar a área clicável para uso posterior
     canvas.setAttribute('data-link-x', linkX.toString());
     canvas.setAttribute('data-link-y', linkY.toString());
     canvas.setAttribute('data-link-width', linkWidth.toString());
     canvas.setAttribute('data-link-height', linkHeight.toString());
     
-    // Adiciona manipulador de cliques no canvas para detecção do clique no link
     if (!canvas.onclick) {
       canvas.onclick = (event) => {
         const rect = canvas.getBoundingClientRect();
@@ -165,7 +170,6 @@ const Index = () => {
         const linkWidth = parseInt(canvas.getAttribute('data-link-width') || '0');
         const linkHeight = parseInt(canvas.getAttribute('data-link-height') || '0');
         
-        // Verificar se o clique foi na área do link
         if (
           x >= linkX && 
           x <= linkX + linkWidth && 
@@ -176,7 +180,6 @@ const Index = () => {
         }
       };
       
-      // Adiciona manipulador para mudar o cursor quando passar sobre o link
       canvas.onmousemove = (event) => {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
@@ -190,7 +193,6 @@ const Index = () => {
         const linkWidth = parseInt(canvas.getAttribute('data-link-width') || '0');
         const linkHeight = parseInt(canvas.getAttribute('data-link-height') || '0');
         
-        // Mudar o cursor para pointer quando estiver sobre o link
         if (
           x >= linkX && 
           x <= linkX + linkWidth && 
@@ -247,9 +249,11 @@ const Index = () => {
         link.href = dataUrl;
         link.click();
         
+        saveSignature(dataUrl);
+        
         toast({
           title: "Assinatura gerada com sucesso!",
-          description: "A imagem foi baixada para o seu dispositivo.",
+          description: "A imagem foi baixada para o seu dispositivo e registrada no sistema.",
         });
       } catch (error) {
         toast({
@@ -262,6 +266,35 @@ const Index = () => {
         setIsGenerating(false);
       }
     }, 500);
+  };
+
+  const saveSignature = (imageUrl: string) => {
+    try {
+      const id = `sig_${Date.now()}`;
+      
+      const signature: Signature = {
+        id,
+        name,
+        role,
+        department,
+        phone,
+        date: new Date().toISOString(),
+        imageUrl
+      };
+      
+      const existingSignaturesJson = localStorage.getItem('signatures');
+      const existingSignatures: Signature[] = existingSignaturesJson 
+        ? JSON.parse(existingSignaturesJson) 
+        : [];
+      
+      existingSignatures.push(signature);
+      localStorage.setItem('signatures', JSON.stringify(existingSignatures));
+      
+      console.log('Assinatura salva com sucesso:', signature);
+      
+    } catch (error) {
+      console.error('Erro ao salvar assinatura:', error);
+    }
   };
 
   const handleReset = () => {
@@ -279,7 +312,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative flex flex-col items-center justify-center px-4 py-8 animate-fade-in">
-      {/* Background image with blur */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat" 
         style={{ 
@@ -290,7 +322,6 @@ const Index = () => {
         }}
       ></div>
       
-      {/* Overlay to ensure contrast */}
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0EA5E9]/60 to-[#0891B2]/70"></div>
 
       <div className="max-w-4xl w-full mx-auto relative z-10">
@@ -299,6 +330,15 @@ const Index = () => {
           <p className="text-white/90 font-montserrat">
             Crie sua assinatura de e-mail personalizada preenchendo os campos abaixo
           </p>
+        </div>
+
+        <div className="absolute top-0 right-0 p-4">
+          <Link to="/admin">
+            <Button variant="outline" className="bg-white/20 text-white hover:bg-white/30 backdrop-blur-sm">
+              <UserCog className="mr-2 h-4 w-4" />
+              Painel Admin
+            </Button>
+          </Link>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
