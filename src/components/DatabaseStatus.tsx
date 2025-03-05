@@ -21,7 +21,9 @@ const DatabaseStatus = () => {
   const checkDatabaseStatus = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/healthcheck');
+      // Use the API URL from environment variables if available
+      const apiBase = import.meta.env.VITE_API_URL || '';
+      const response = await fetch(`${apiBase}/api/healthcheck`);
       const data = await response.json();
       
       setDbStatus({
