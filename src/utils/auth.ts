@@ -7,7 +7,7 @@ interface User {
 
 // Admin credentials
 const ADMIN_CREDENTIALS: User = {
-  username: "Administrator",
+  username: "Administrator", 
   password: "Barcas@2025*"
 };
 
