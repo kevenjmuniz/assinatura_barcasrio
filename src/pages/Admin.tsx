@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,11 +12,17 @@ import {
   SortDesc, 
   Download,
   Eye,
-  LogOut
+  LogOut,
+  Edit,
+  DownloadCloud,
+  LayoutDashboard,
+  List
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Signature } from "./Index";
 import { logout } from "@/utils/auth";
+import { AdminDashboard } from "@/components/AdminDashboard";
+import { SignatureEditor } from "@/components/SignatureEditor";
 
 const Admin = () => {
   const [signatures, setSignatures] = useState<Signature[]>([]);
@@ -23,6 +30,8 @@ const Admin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [selectedSignature, setSelectedSignature] = useState<Signature | null>(null);
+  const [editingSignature, setEditingSignature] = useState<Signature | null>(null);
+  const [view, setView] = useState<"list" | "dashboard">("list");
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -126,6 +135,77 @@ const Admin = () => {
     }
   };
 
+  const handleBulkDownload = () => {
+    if (filteredSignatures.length === 0) {
+      toast({
+        title: "Nenhuma assinatura disponível",
+        description: "Não há assinaturas para baixar.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a zip file or bulk download
+    try {
+      let downloadCount = 0;
+      
+      filteredSignatures.forEach((signature, index) => {
+        if (signature.imageUrl) {
+          setTimeout(() => {
+            const link = document.createElement("a");
+            link.href = signature.imageUrl!;
+            link.download = `assinatura-${signature.name.toLowerCase().replace(/\s+/g, "-")}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            downloadCount++;
+          }, index * 300); // Staggered downloads to prevent browser issues
+        }
+      });
+      
+      toast({
+        title: "Downloads iniciados",
+        description: `Baixando ${filteredSignatures.length} assinaturas. Verifique sua pasta de downloads.`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no download em massa",
+        description: "Ocorreu um problema ao baixar as assinaturas.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditSave = (updatedSignature: Signature) => {
+    try {
+      const updatedSignatures = signatures.map(sig => 
+        sig.id === updatedSignature.id ? updatedSignature : sig
+      );
+      
+      setSignatures(updatedSignatures);
+      setFilteredSignatures(
+        filteredSignatures.map(sig => 
+          sig.id === updatedSignature.id ? updatedSignature : sig
+        )
+      );
+      
+      localStorage.setItem("signatures", JSON.stringify(updatedSignatures));
+      
+      setEditingSignature(null);
+      
+      toast({
+        title: "Assinatura atualizada",
+        description: "A assinatura foi atualizada com sucesso.",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro ao atualizar",
+        description: "Não foi possível atualizar a assinatura.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleLogout = () => {
     logout();
     toast({
@@ -160,7 +240,7 @@ const Admin = () => {
       
       <div className="absolute inset-0 z-0 bg-gradient-to-b from-[#0EA5E9]/70 to-[#0891B2]/80"></div>
 
-      <div className="relative z-10 max-w-6xl mx-auto">
+      <div className="relative z-10 max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <Link to="/">
@@ -183,103 +263,153 @@ const Admin = () => {
           </Button>
         </div>
 
-        <Card className="bg-white/95 backdrop-blur-sm border-white/10 mb-6">
-          <CardHeader>
-            <CardTitle>Assinaturas Emitidas</CardTitle>
-            <CardDescription>
-              Visualize e gerencie todas as assinaturas geradas pelo sistema.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-2 mb-6">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                <Input
-                  placeholder="Pesquisar por nome, cargo ou setor..."
-                  className="pl-10"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-              <Button
-                variant="outline"
-                className="flex items-center gap-2"
-                onClick={handleSort}
-              >
-                {sortDirection === "asc" ? (
-                  <SortAsc className="h-4 w-4" />
-                ) : (
-                  <SortDesc className="h-4 w-4" />
-                )}
-                Data
-              </Button>
-            </div>
+        <div className="flex justify-end mb-4 space-x-2">
+          <Button
+            variant={view === "dashboard" ? "default" : "outline"}
+            className={view === "dashboard" ? "bg-white text-blue-600" : "bg-white/20 text-white hover:bg-white/30"}
+            onClick={() => setView("dashboard")}
+          >
+            <LayoutDashboard className="mr-2 h-4 w-4" />
+            Dashboard
+          </Button>
+          
+          <Button
+            variant={view === "list" ? "default" : "outline"}
+            className={view === "list" ? "bg-white text-blue-600" : "bg-white/20 text-white hover:bg-white/30"}
+            onClick={() => setView("list")}
+          >
+            <List className="mr-2 h-4 w-4" />
+            Listagem
+          </Button>
+        </div>
 
-            {filteredSignatures.length === 0 ? (
-              <div className="text-center py-10 text-gray-500">
-                {signatures.length === 0
-                  ? "Nenhuma assinatura foi gerada ainda."
-                  : "Nenhuma assinatura corresponde à pesquisa."}
+        {view === "dashboard" && (
+          <AdminDashboard signatures={signatures} />
+        )}
+
+        {view === "list" && (
+          <Card className="bg-white/95 backdrop-blur-sm border-white/10 mb-6">
+            <CardHeader>
+              <CardTitle>Assinaturas Emitidas</CardTitle>
+              <CardDescription>
+                Visualize e gerencie todas as assinaturas geradas pelo sistema.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col sm:flex-row items-center gap-2 mb-6">
+                <div className="relative flex-1 w-full">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Input
+                    placeholder="Pesquisar por nome, cargo ou setor..."
+                    className="pl-10"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                </div>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                  <Button
+                    variant="outline"
+                    className="flex items-center gap-2"
+                    onClick={handleSort}
+                  >
+                    {sortDirection === "asc" ? (
+                      <SortAsc className="h-4 w-4" />
+                    ) : (
+                      <SortDesc className="h-4 w-4" />
+                    )}
+                    Data
+                  </Button>
+                  
+                  <Button 
+                    variant="outline"
+                    className="flex items-center gap-2"
+                    onClick={handleBulkDownload}
+                    disabled={filteredSignatures.length === 0}
+                  >
+                    <DownloadCloud className="h-4 w-4" />
+                    <span className="hidden sm:inline">Baixar Todas</span>
+                  </Button>
+                </div>
               </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b border-gray-200">
-                      <th className="py-3 text-left text-sm font-medium text-gray-700">Nome</th>
-                      <th className="py-3 text-left text-sm font-medium text-gray-700">Cargo</th>
-                      <th className="py-3 text-left text-sm font-medium text-gray-700">Setor</th>
-                      <th className="py-3 text-left text-sm font-medium text-gray-700">Telefone</th>
-                      <th className="py-3 text-left text-sm font-medium text-gray-700">Data</th>
-                      <th className="py-3 text-right text-sm font-medium text-gray-700">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredSignatures.map((signature) => (
-                      <tr
-                        key={signature.id}
-                        className="border-b border-gray-100 hover:bg-gray-50"
-                      >
-                        <td className="py-3 text-sm text-gray-900">{signature.name}</td>
-                        <td className="py-3 text-sm text-gray-900">{signature.role}</td>
-                        <td className="py-3 text-sm text-gray-900">{signature.department}</td>
-                        <td className="py-3 text-sm text-gray-900">{signature.phone || "-"}</td>
-                        <td className="py-3 text-sm text-gray-900">{formatDate(signature.date)}</td>
-                        <td className="py-3 text-right space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() => setSelectedSignature(signature)}
-                          >
-                            <Eye className="h-4 w-4 text-gray-600" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() => signature.imageUrl && handleDownload(signature)}
-                            disabled={!signature.imageUrl}
-                          >
-                            <Download className="h-4 w-4 text-blue-600" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0"
-                            onClick={() => handleDelete(signature.id)}
-                          >
-                            <Trash2 className="h-4 w-4 text-red-600" />
-                          </Button>
-                        </td>
+
+              {filteredSignatures.length === 0 ? (
+                <div className="text-center py-10 text-gray-500">
+                  {signatures.length === 0
+                    ? "Nenhuma assinatura foi gerada ainda."
+                    : "Nenhuma assinatura corresponde à pesquisa."}
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-200">
+                        <th className="py-3 text-left text-sm font-medium text-gray-700">Nome</th>
+                        <th className="py-3 text-left text-sm font-medium text-gray-700">Cargo</th>
+                        <th className="py-3 text-left text-sm font-medium text-gray-700 hidden md:table-cell">Setor</th>
+                        <th className="py-3 text-left text-sm font-medium text-gray-700 hidden lg:table-cell">Telefone</th>
+                        <th className="py-3 text-left text-sm font-medium text-gray-700 hidden sm:table-cell">Data</th>
+                        <th className="py-3 text-right text-sm font-medium text-gray-700">Ações</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+                    </thead>
+                    <tbody>
+                      {filteredSignatures.map((signature) => (
+                        <tr
+                          key={signature.id}
+                          className="border-b border-gray-100 hover:bg-gray-50"
+                        >
+                          <td className="py-3 text-sm text-gray-900">{signature.name}</td>
+                          <td className="py-3 text-sm text-gray-900">{signature.role}</td>
+                          <td className="py-3 text-sm text-gray-900 hidden md:table-cell">{signature.department}</td>
+                          <td className="py-3 text-sm text-gray-900 hidden lg:table-cell">{signature.phone || "-"}</td>
+                          <td className="py-3 text-sm text-gray-900 hidden sm:table-cell">{formatDate(signature.date)}</td>
+                          <td className="py-3 text-right space-x-1">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              onClick={() => setSelectedSignature(signature)}
+                              title="Visualizar"
+                            >
+                              <Eye className="h-4 w-4 text-gray-600" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              onClick={() => setEditingSignature(signature)}
+                              title="Editar"
+                            >
+                              <Edit className="h-4 w-4 text-blue-600" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              onClick={() => signature.imageUrl && handleDownload(signature)}
+                              disabled={!signature.imageUrl}
+                              title="Baixar"
+                            >
+                              <Download className="h-4 w-4 text-green-600" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleDelete(signature.id)}
+                              title="Excluir"
+                            >
+                              <Trash2 className="h-4 w-4 text-red-600" />
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        )}
 
         {selectedSignature && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
@@ -331,12 +461,25 @@ const Admin = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      onClick={() => {
+                        setSelectedSignature(null);
+                        setEditingSignature(selectedSignature);
+                      }}
+                    >
+                      <Edit className="mr-2 h-4 w-4" />
+                      Editar
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
                       onClick={() => handleDownload(selectedSignature)}
                       disabled={!selectedSignature.imageUrl}
                     >
                       <Download className="mr-2 h-4 w-4" />
                       Download
                     </Button>
+                    
                     <Button
                       variant="destructive"
                       size="sm"
@@ -353,6 +496,14 @@ const Admin = () => {
               </CardContent>
             </Card>
           </div>
+        )}
+
+        {editingSignature && (
+          <SignatureEditor 
+            signature={editingSignature}
+            onSave={handleEditSave}
+            onCancel={() => setEditingSignature(null)}
+          />
         )}
       </div>
     </div>
