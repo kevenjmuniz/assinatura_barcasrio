@@ -1,8 +1,26 @@
 
-// This is a re-export from sonner, which is the toast library we're actually using
-import { toast } from "sonner";
+import { toast as sonnerToast } from "sonner";
 
-export { toast };
+type ToastType = {
+  title?: string;
+  description?: string;
+  action?: React.ReactNode;
+  variant?: "default" | "destructive";
+}
+
+export const toast = (props: ToastType) => {
+  if (props.variant === "destructive") {
+    return sonnerToast.error(props.title, {
+      description: props.description,
+      action: props.action
+    });
+  }
+  
+  return sonnerToast(props.title || "", {
+    description: props.description,
+    action: props.action
+  });
+};
 
 export const useToast = () => {
   return { toast };
